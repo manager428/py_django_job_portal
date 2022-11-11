@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+{% block content %}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-default card-view">
+            <div class="panel-wrapper collapse in">
+                <div class="panel-body pt-0">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="row mb-5">
+                                <div class="col-md-3">
+                                    <h6 class="mb-0 weight-500 capitalize-font">Title</h6>
+                                </div>
+                                <div class="col-md-9">
+                                    <span class="mb-0 capitalize-font">{{ job.job_title }}</span>
+                                </div>
+                            </div>
+                            <div class="row mb-5">
+                                <div class="col-md-3">
+                                    <h6 class="mb-0 weight-500 capitalize-font">Company</h6>
+                                </div>
+                                <div class="col-md-9">
+                                    <span class="mb-0 capitalize-font">{{ job.job_company }}</span>
+                                </div>
+                            </div>
+                            <div class="row mb-5">
+                                <div class="col-md-3">
+                                    <h6 class="mb-0 weight-500 capitalize-font">City</h6>
+                                </div>
+                                <div class="col-md-9">
+                                    <span class="mb-0 capitalize-font">{{ job.job_city }}</span>
+                                </div>
+                            </div>
+                            <div class="row mb-5">
+                                <div class="col-md-3">
+                                    <h6 class="mb-0 weight-500 capitalize-font">Type</h6>
+                                </div>
+                                <div class="col-md-9">
+                                    <span class="mb-0 capitalize-font">{{ job.job_type }}</span>
+                                </div>
+                            </div>
+                            <div class="row mb-5">
+                                <div class="col-md-3">
+                                    <h6 class="mb-0 weight-500 capitalize-font">Email1</h6>
+                                </div>
+                                <div class="col-md-9">
+                                    <span class="mb-0 capitalize-font">{{ job.job_email1 }}</span>
+                                </div>
+                            </div>
+                            <div class="row mb-5">
+                                <div class="col-md-3">
+                                    <h6 class="mb-0 weight-500 capitalize-font">Email2</h6>
+                                </div>
+                                <div class="col-md-9">
+                                    <span class="mb-0 capitalize-font">{{ job.job_email2 }}</span>
+                                </div>
+                            </div>
+                            <div class="row mb-5">
+                                <div class="col-md-3">
+                                    <h6 class="mb-0 weight-500 capitalize-font">External Site</h6>
+                                </div>
+                                <div class="col-md-9">
+                                    <span class="mb-0 capitalize-font">{{ job.job_external_site }}</span>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-xs-7">
+                                    <h6 class="mb-5 weight-500 capitalize-font">Account Company</h6>
+                                </div>
+                                <div class="col-xs-5">
+                                    <span class="mb-5 capitalize-font">{{ job.acc_company }}</span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-7">
+                                    <h6 class="mb-5 weight-500 capitalize-font">Account Company Size</h6>
+                                </div>
+                                <div class="col-xs-5">
+                                    <span class="mb-5 capitalize-font">{{ job.acc_company_size }}</span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-7">
+                                    <h6 class="mb-5 weight-500 capitalize-font">Account Name</h6>
+                                </div>
+                                <div class="col-xs-5">
+                                    <span class="mb-5 capitalize-font">{{ job.acc_name }}</span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-7">
+                                    <h6 class="mb-5 weight-500 capitalize-font">Account Phone</h6>
+                                </div>
+                                <div class="col-xs-5">
+                                    <span class="mb-5 capitalize-font">{{ job.acc_phone }}</span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-7">
+                                    <h6 class="mb-5 weight-500 capitalize-font">How Did You Hear About Us</h6>
+                                </div>
+                                <div class="col-xs-5">
+                                    <span class="mb-5 capitalize-font">{{ job.acc_hear }}</span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-7">
+                                    <h6 class="mb-5 weight-500 capitalize-font">Created At</h6>
+                                </div>
+                                <div class="col-xs-5">
+                                    <span class="mb-5 capitalize-font">{{ job.created_at }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-10">
+                        <div class="col-md-12">
+                            <h6>Job Description</h6>
+                            <hr>
+                        </div>
+                        <div class="col-md-12">
+                            <p class="mb-10">{{ job.job_description|safe }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

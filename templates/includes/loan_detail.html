@@ -1,0 +1,171 @@
+{% load static %}
+{% load i18n %}
+{% load humanize %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="row">
+            <div class="col-md-12" {% if loan.attached_files %}style="min-height: 180px;"{% else %}style="min-height: 285px;"{% endif %} >
+                <h5 class="mb-15 weight-500 capitalize-font">{{ loan.purpose }}</h5>
+                <p class="mb-15">{{ loan.header|linebreaksbr }}</p>
+            </div>
+            
+        </div>
+        {% if loan.attached_files %}
+            <div class="row">
+                <div class="col-xs-12">
+                    <h5 class="weight-500 capitalize-font">Attached Files</h5>
+                </div>
+            </div>
+            <hr class="light-grey-hr mt-5 mb-5"/>
+            <div class="row">
+                <div class="col-md-12 mb-10">
+                    <p class="mb-10">{{ loan.attach_description|linebreaksbr }}</p>
+                    {% for item in loan.attached_files %}
+                        <a href="{{ item.file.url }}" download>
+                            <span class="txt-primary inline-block mr-20"><i class="fa fa-paperclip mr-5"></i>{{ item }}</span>
+                        </a>
+                    {% endfor%}
+                </div>
+            </div>
+        {% endif %}
+        <hr class="light-grey-hr mb-10"/>
+        <div class="row mb-5">
+            <div class="col-md-3">
+                <h6 class="mb-0 weight-500 capitalize-font">Address</h6>
+            </div>
+            <div class="col-md-9">
+                <span class="mb-0 capitalize-font">{{ loan.address }}</span>
+            </div>
+        </div>
+        <div class="row mb-5">
+            <div class="col-md-3">
+                <h6 class="mb-0 weight-500 capitalize-font">Work Industry</h6>
+            </div>
+            <div class="col-md-9">
+                <span class="mb-0 capitalize-font">{{ loan.industry }}</span>
+            </div>
+        </div>
+        <div class="row mb-5">
+            <div class="col-md-3">
+                <h6 class="mb-0 weight-500 capitalize-font">Created At</h6>
+            </div>
+            <div class="col-md-9">
+                <span class="mb-0 capitalize-font">{{ loan.created_at }}</span>
+            </div>
+        </div>
+        
+    </div>
+    <div class="col-md-4">
+        <div class="row">
+            <div class="col-xs-7">
+                <h6 class="mb-5 weight-500 capitalize-font">Loan Amount</h6>
+            </div>
+            <div class="col-xs-5">
+                <span class="mb-5 capitalize-font">{{ loan.loan_amount|intcomma }}</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-7">
+                <h6 class="mb-5 weight-500 capitalize-font">Loan Term</h6>
+            </div>
+            <div class="col-xs-5">
+                <span class="mb-5 capitalize-font">{{ loan.loan_term }}</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-7">
+                <h6 class="mb-5 weight-500 capitalize-font">Loan Security</h6>
+            </div>
+            <div class="col-xs-5">
+                <span class="mb-5 capitalize-font">{{ loan.loan_security }}</span>
+            </div>
+        </div>
+        {% if loan.loan_security %}
+            <div class="row">
+                <div class="col-xs-7">
+                    <h6 class="mb-5 weight-500 capitalize-font">Cadastral Code</h6>
+                </div>
+                <div class="col-xs-5">
+                    <span class="mb-5 capitalize-font">{{ loan.cadastral_code }}</span>
+                </div>
+            </div>
+        {% endif %}
+        <div class="row">
+            <div class="col-xs-7">
+                <h6 class="mb-5 weight-500 capitalize-font">Co-Borrower</h6>
+            </div>
+            <div class="col-xs-5">
+                <span class="mb-5 capitalize-font">{{ loan.co_borrower }}</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-7">
+                <h6 class="mb-5 weight-500 capitalize-font">Income Type</h6>
+            </div>
+            <div class="col-xs-5">
+                <span class="mb-5 capitalize-font">{{ loan.income_type }}</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-7">
+                <h6 class="mb-5 weight-500 capitalize-font">Proof of income</h6>
+            </div>
+            <div class="col-xs-5">
+                <span class="mb-5 capitalize-font">{{ loan.income_proof }}</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-7">
+                <h6 class="mb-5 weight-500 capitalize-font">Income Amount</h6>
+            </div>
+            <div class="col-xs-5">
+                <span class="mb-5 capitalize-font">{{ loan.income_amount|default_if_none:''|intcomma }}</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-7">
+                <h6 class="mb-5 weight-500 capitalize-font">Current Payables in Loan</h6>
+            </div>
+            <div class="col-xs-5">
+                <span class="mb-5 capitalize-font">{{ loan.payable_amount|default_if_none:''|intcomma }}</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-7">
+                <h6 class="mb-5 weight-500 capitalize-font">Marital Status</h6>
+            </div>
+            <div class="col-xs-5">
+                <span class="mb-5 capitalize-font">{{ loan.marital_status }}</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-7">
+                <h6 class="mb-5 weight-500 capitalize-font">Dependents</h6>
+            </div>
+            <div class="col-xs-5">
+                <span class="mb-5 capitalize-font">{{ loan.dependents|default_if_none:''|floatformat }}</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-7">
+                <h6 class="mb-5 weight-500 capitalize-font">City</h6>
+            </div>
+            <div class="col-xs-5">
+                <span class="mb-5 capitalize-font">{{ loan.city.name }}</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-7">
+                <h6 class="mb-5 weight-500 capitalize-font">Currency</h6>
+            </div>
+            <div class="col-xs-5">
+                <span class="mb-5 capitalize-font">{{ loan.currency }}</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <span class="capitalize-font pull-right pr-5" style="font-size: 80%">Loan ID : {{ loan.loan_no }}</span>
+            </div>
+        </div>
+    </div>
+</div>

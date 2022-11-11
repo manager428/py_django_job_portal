@@ -1,0 +1,59 @@
+{% load static %}
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<title>{% block title %}{% blocktrans %}Refine{% endblocktrans %}{% endblock %}</title>
+		<meta name="description" content="Splasher is a Dashboard & Admin Site Responsive Template by hencework." />
+		<meta name="keywords" content="admin, admin dashboard, admin template, cms, crm, Splasher Admin, Splasheradmin, premium admin templates, responsive admin, sass, panel, software, ui, visualization, web app, application" />
+		<meta name="author" content="hencework"/>
+		
+		<!-- Favicon -->
+		<link rel="shortcut icon" href="favicon.ico">
+		<link rel="icon" href="favicon.ico" type="image/x-icon">
+		
+		<!-- vector map CSS -->
+		<link href="{% static 'plugins/bower_components/jasny-bootstrap/dist/css/jasny-bootstrap.min.css' %}" rel="stylesheet" type="text/css"/>
+		
+		<!-- Custom CSS -->
+		<link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css">
+		<link href="{% static 'plugins/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css' %}" rel="stylesheet" type="text/css"/>
+		
+	</head>
+	<body>
+		
+		<div class="wrapper  pa-0">
+			<!-- Main Content -->
+			{% block content %}
+			{% endblock %}
+			<!-- /Main Content -->
+		
+		</div>
+		<!-- /#wrapper -->
+		
+		<!-- JavaScript -->
+		
+		<!-- jQuery -->
+	    <script src="{% static 'plugins/bower_components/jquery/dist/jquery.min.js' %}"></script>
+		
+		<!-- Moment -->
+		<script src="{% static 'plugins/bower_components/moment/min/moment.min.js' %}"></script>
+	    <!-- Bootstrap Core JavaScript -->
+	    <script src="{% static 'plugins/bower_components/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+	    <script src="{% static 'plugins/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js' %}"></script>
+		<script src="{% static 'plugins/bower_components/jasny-bootstrap/dist/js/jasny-bootstrap.min.js' %}"></script>
+		<script src="{% static 'plugins/bower_components/bootstrap-validator/dist/validator.min.js' %}"></script>
+	    
+		<!-- Slimscroll JavaScript -->
+		<script src="{% static 'js/jquery.slimscroll.js' %}"></script>
+		
+		<!-- Init JavaScript -->
+		<script src="{% static 'js/init.js' %}"></script>
+		{% block javascript%}
+		{% endblock %}
+	</body>
+
+<!-- Mirrored from hencework.com/theme/splasher/demo-1/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 09 Oct 2018 07:19:26 GMT -->
+</html>

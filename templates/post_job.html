@@ -1,0 +1,403 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+{% block content %}
+    <style>
+        .btn-default{
+            background: #fff !important;
+        }
+        .btn-default:hover{
+            background: #fff !important;
+        }
+        .wizard .content > .body{
+            padding: 15px;
+        }
+        .wizard .content > .body input{
+            height: 36px;
+        }
+        .wizard .content > .body label{
+            font-size: 15px;
+        }
+        .wizard > .content > .body ul {
+            list-style: none !important;
+        }
+        .wizard > .steps > ul > li {
+            margin-right: 1%;
+            margin-left: 1%;
+            margin-top: 10px;
+        }
+        .wizard > .steps > ul > li {
+            font-size: 14px;
+            text-align: center;
+            cursor: default;
+            min-width: 180px;
+            float: left;
+            position: relative;
+            background-color: #d9e3f7;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none; 
+            transition: background-color 0.2s ease;
+        }
+
+        .wizard > .steps > ul > li:after,
+        .wizard > .steps > ul > li:before {
+            content: " ";
+            position: absolute;
+            top: 0;
+            right: -30px;
+            width: 0;
+            height: 0;
+            border-top: 23px solid transparent;
+            border-bottom: 30px solid transparent;
+            border-left: 30px solid #d9e3f7;	
+            z-index: 2;
+            transition: border-color 0.2s ease;
+        }
+
+        .wizard > .steps > ul > li:before {
+            right: auto;
+            left: 0;
+            border-left: 30px solid #fff;	
+            z-index: 0;
+        }
+        .wizard > .steps > ul > li:first-child:before {
+            border: none;
+        }
+        .wizard > .steps > ul > li:first-child {
+            border-top-left-radius: 4px;
+            border-bottom-left-radius: 4px;
+        }
+        .wizard > .steps > ul > li.done:after{
+            border-left: 30px solid #22af47;	
+            
+        }
+        .wizard > .steps > ul > li.done{
+            background-color: #22af47;
+        }
+        
+        .wizard > .steps > ul > li.done span:before {
+            opacity: 1;
+            -webkit-transition: opacity 0.3s ease 0.5s;
+            -moz-transition: opacity 0.3s ease 0.5s;
+            -ms-transition: opacity 0.3s ease 0.5s;
+            transition: opacity 0.3s ease 0.5s;
+        }
+        .wizard > .steps > ul > li.current {
+            color: #fff;
+            background-color: #12c541 !important;
+        }
+
+        .wizard > .steps > ul > li.current:after {
+            border-left: 30px solid #12c541;	
+        }
+    </style>
+    
+    <!-- Row -->
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default border-panel card-view">
+                <div class="panel-wrapper collapse in">
+                    <div class="panel-body">
+                        <form id="example-advanced-form" action="#">
+                           
+                            <h3><span class="head-font capitalize-font">Job Details</span></h3>
+                            <fieldset>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-wrap">
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <div class="col-md-12 col-xs-12">
+                                                        <h3>Job Details</h3>
+                                                    </div>
+                                                </div>
+                                                <div class="row mt-30">
+                                                    <div class="col-md-8 col-xs-12">
+                                                        <div class="form-group">
+                                                            <div class="row">
+                                                                <div class="col-md-3 col-sm-5 col-xs-12">
+                                                                    <label class="control-label mt-10" for="job_title">Job Title</label>
+                                                                </div>
+                                                                <div class="col-md-9 col-sm-7 col-xs-12">
+                                                                    <input id="job_title" type="text" name="job_title" class="form-control required" value="{% if job %}{{ job.job_title }}{% endif %}" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="row mt-10">
+                                                                <div class="col-md-3 col-sm-5 col-xs-12">
+                                                                    <label class="control-label mt-10" for="job_company">Company</label>
+                                                                </div>
+                                                                <div class="col-md-9 col-sm-7 col-xs-12">
+                                                                    <input id="job_company" type="text" name="job_company" class="form-control required" value="{% if job %}{{ job.job_company }}{% endif %}" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="row mt-10">
+                                                                <div class="col-md-3 col-sm-5 col-xs-12">
+                                                                    <label class="control-label mt-10" for="job_city">City</label>
+                                                                </div>
+                                                                <div class="col-md-9 col-sm-7 col-xs-12">
+                                                                    <input id="job_city" type="text" name="job_city" class="form-control required" value="{% if job %}{{ job.job_city }}{% endif %}" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="row mt-10">
+                                                                <div class="col-md-3 col-sm-5 col-xs-12">
+                                                                    <label class="control-label mt-10" for="job_type">Type of Job</label>
+                                                                </div>
+                                                                <div class="col-md-9 col-sm-7 col-xs-12">
+                                                                    <select id="job_type" name="job_type" class="form-control">
+                                                                        <option value=""> -Optional- </option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row mt-30">
+                                                                <div class="col-xs-12">
+                                                                    <h5>Allow applicants to apply through:</h5>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row mt-10">
+                                                                <div class="col-md-3 col-sm-5 col-xs-12">
+                                                                    <div class="row">
+                                                                        <div class="col-xs-2">
+                                                                            <input type="radio" id="email" name="application_type" value="email" checked>
+                                                                        </div>
+                                                                        <div class="col-xs-9">
+                                                                            <label for="email" class="mt-10">Email</label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-9 col-sm-7 col-xs-12">
+                                                                    <div class="col-12">
+                                                                        <input id="job_email1" type="email" name="job_email1" class="form-control required" value="{% if job %}{{ job.job_email1 }}{% endif %}" placeholder="youremail@domain.com"/>
+                                                                    </div>
+                                                                    <div class="col-12 mt-10">
+                                                                        <input id="job_email2" type="email" name="job_email2" class="form-control" value="{% if job %}{{ job.job_email2 }}{% endif %}" placeholder="youremail@domain.com"/>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row mt-20">
+                                                                <div class="col-md-3 col-sm-5 col-xs-12">
+                                                                    <div class="row">
+                                                                        <div class="col-xs-2">
+                                                                            <input type="radio" id="external" name="application_type" value="external">
+                                                                        </div>
+                                                                        <div class="col-xs-9">
+                                                                            <label for="external" class="mt-10">External Site</label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-9 col-sm-7 col-xs-12">
+                                                                    <input id="job_external_site" type="text" name="job_external_site" class="form-control nonecase-font" value="{% if job %}{{ job.job_external_site }}{% endif %}" placeholder="http://www.yourjobpage.com"/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row mt-30">
+                                                                <div class="col-xs-12" style="border-bottom: 1px solid #eee;">
+                                                                    <h6 class="mb-10">Job Description</h6>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row mt-30">
+                                                                <textarea id="job_description" name="job_description" class="textarea_editor form-control" rows="10" placeholder="Enter your job description here ...">{% if job %}{{ job.job_description }}{% endif %}</textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <h3><span class="head-font capitalize-font">Account</span></h3>
+                            <fieldset>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="row">
+                                            <div class="col-xs-12" style="border-bottom: 1px solid #eee;">
+                                                <h4 class="mb-10">Account Information</h4>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-12 mb-10 mt-10">
+                                                <span class="">Tell us about you</span>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-xs-12">
+                                                <div class="row">
+                                                    <div class="col-xs-12">
+                                                        <label class="control-label mb-10 h5" for="acc_company">Your Company Name</label>
+                                                        <input id="acc_company" type="text" name="acc_company" class="form-control required" value="{% if job %}{{ job.acc_company }}{% endif %}" />
+                                                    </div>
+                                                    <div class="col-xs-12 mt-15">
+                                                        <label class="control-label mb-10 h5" for="acc_comany_size">Company Size</label>
+                                                        <input id="acc_comany_size" type="text" name="acc_comany_size" class="form-control required" value="{% if job %}{{ job.acc_comany_size }}{% endif %}" />
+                                                    </div>
+                                                    <div class="col-xs-12 mt-15">
+                                                        <label class="control-label mb-10 h5" for="acc_name">Your Name</label>
+                                                        <input id="acc_name" type="text" name="acc_name" class="form-control required" value="{% if job %}{{ job.acc_name }}{% endif %}" />
+                                                    </div>
+                                                    <div class="col-xs-12 mt-15">
+                                                        <label class="control-label mb-10 h5" for="acc_phone">Phone</label>
+                                                        <input id="acc_phone" type="text" name="acc_phone" class="form-control required" value="{% if job %}{{ job.acc_phone }}{% endif %}" />
+                                                    </div>
+                                                    <div class="col-xs-12 mt-15">
+                                                        <label class="control-label mb-10 h5" for="acc_hear">How did you hear about us</label>
+                                                        <input id="acc_hear" type="text" name="acc_hear" class="form-control required" value="{% if job %}{{ job.acc_hear }}{% endif %}" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <h3><span class="head-font capitalize-font">Billing</span></h3>
+                            <fieldset>
+                                <!--CREDIT CART PAYMENT-->
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="row">
+                                            <div class="col-xs-12 mb-10 mt-10">
+                                                <h5 class="">How do you want tp push your jobs to Glassdoor?</h5>
+                                            </div>
+                                            <div class="col-xs-12 mt-10">
+                                                <input type="radio" id="push_job" name="billing_type" value="push_job" style="float:left;" checked>
+                                                <label for="push_job" class="mt-10 ml-10 pt-4" style="float: left;">Push all published job postings by default</label>
+                                            </div>
+                                            <div class="col-xs-12 mb-10 mt-5">
+                                                <input type="radio" id="choose_job" name="billing_type" value="choose_job" style="float:left;">
+                                                <label for="choose_job" class="mt-10 ml-10 pt-4" style="float: left;">Choose on a per job posting basis</label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-12 mt-10 mb-10" style="border-bottom: 1px solid #eee;">
+                                                
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-12 mt-10 mb-10">
+                                                <p>
+                                                    Push published job postings from your site to Glassdoor. Newly published job postings and updates to existing ones will be synced within 24 hours.
+                                                    Learn more about this integration or contact partner-job-issues@glassdoor.com for support
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--CREDIT CART PAYMENT END-->
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Row -->
+    
+{% endblock %}
+{% block javascript %}
+    <!-- <script src="https://checkout.stripe.com/checkout.js"></script> -->
+    <script src="https://js.stripe.com/v3/"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('select').selectpicker();
+        
+            var form_2 = $("#example-advanced-form");
+            form_2.steps({
+                headerTag: "h3",
+                bodyTag: "fieldset",
+                transitionEffect: "fade",
+                titleTemplate: '#title#',
+                labels: {
+                    finish: "place order",
+                    next: "Next",
+                    previous: "Previous",
+                },
+                onStepChanging: function (event, currentIndex, newIndex)
+                {
+                    // Allways allow previous action even if the current form is not valid!
+                    if (currentIndex > newIndex)
+                    {
+                        return true;
+                    }
+                    // Forbid next action on "Warning" step if the user is to young
+                    if (newIndex === 2 && Number($("#age-2").val()) < 18)
+                    {
+                        return false;
+                    }
+                    // Needed in some cases if the user went back (clean up)
+                    if (currentIndex < newIndex)
+                    {
+                        // To remove error styles
+                        form_2.find(".body:eq(" + newIndex + ") label.error").remove();
+                        form_2.find(".body:eq(" + newIndex + ") .error").removeClass("error");
+                    }
+                    form_2.validate().settings.ignore = ":disabled,:hidden";
+                    return form_2.valid();
+                },
+                onFinishing: function (event, currentIndex)
+                {
+                    form_2.validate().settings.ignore = ":disabled";
+                    return form_2.valid();
+                },
+                onFinished: function (event, currentIndex)
+                {
+                    var data = {
+                        job_title: $("#job_title").val(),
+                        job_company: $("#job_company").val(),
+                        job_city: $("#job_city").val(),
+                        job_type: $("#job_type").val(),
+                        job_email1: $("#job_email1").val(),
+                        job_email2: $("#job_email2").val(),
+                        job_external_site: $("#job_external_site").val(),
+                        job_description: $("#job_description").val(),
+                        acc_company: $("#acc_company").val(),
+                        acc_company_size: $("#acc_comany_size").val(),
+                        acc_name: $("#acc_name").val(),
+                        acc_phone: $("#acc_phone").val(),
+                        acc_hear: $("#acc_hear").val(),
+                        billing_type: $('input[name="billing_type"]:checked').val(),
+                        application_type: $('input[name="application_type"]:checked').val(),
+                    }
+                    console.log(data);
+                    var stripe = Stripe('{{ stripe_pub_key }}');
+                    $.ajax({
+                        headers: { "X-CSRFToken": '{{csrf_token}}' },
+                        url: "{% url 'charge' %}",
+                        type: 'POST',
+                        data: data,
+                        success: function (data) {
+                            console.log(data)
+                            stripe.redirectToCheckout({sessionId: data.sessionId}).then((res) => {
+                                console.log(res);
+                            })
+                        }
+                    });  
+                    
+                    
+                    
+                }
+            })
+            // .validate({
+            // 	errorPlacement: function errorPlacement(error, element) { element.before(error); },
+            // 	rules: {
+            // 		confirm: {
+            // 			equalTo: "#password-2"
+            // 		}
+            // 	}
+            // });
+            var editor = $('.textarea_editor').wysihtml5({
+                toolbar: {
+                    "font-styles": false, //Font styling, e.g. h1, h2, etc.
+                    "emphasis": true, //Italics, bold, etc.
+                    "lists": true, //(Un)ordered lists, e.g. Bullets, Numbers.
+                    "html": false, //Button which allows you to edit the generated HTML.
+                    "link": true, //Button to insert a link.
+                    "image": false, //Button to insert an image.
+                    "blockquote": false
+                }
+            });
+        });
+
+        
+    
+    </script>
+{% endblock %}

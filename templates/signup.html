@@ -1,0 +1,162 @@
+{% extends 'base_auth.html' %}
+{% load static %}
+{% load i18n %}
+{% block content %}
+	<script src="https://www.google.com/recaptcha/api.js"></script>
+	<div class="page-wrapper pa-0 ma-0 auth-page">
+		<div class="container">
+			<!-- Row -->
+			<div class="table-struct full-width full-height">
+				<div class="table-cell vertical-align-middle auth-form-wrap">
+					<div class="register-form  ml-auto mr-auto no-float card-view pt-30 pb-30">
+						<div class="row">
+							<div class="col-sm-12 col-xs-12">
+								<div class="mb-30 text-center">
+									<a href="{% url 'index' %}"><img src="{% static 'img/logo.png' %}" alt="logo" style="width: 259px;"/></a>
+									<h3 class="text-center txt-dark mb-10">Sign up to Refine</h3>
+									
+									{% if errors %}
+										<div class="form-group text-center">
+											<p class="txt-danger p-2" style="font-size: 14.9px;">
+												{% if errors == '1' %}
+													This email is already exists
+												{%elif errors == '2' %}
+													This Phone number is already exists
+												{%elif errors == '2' %}
+													You are not human, please try it again.
+												{% endif %}
+											</p>
+										</div>
+									{% else %}
+										<h6 class="text-center nonecase-font txt-grey">Enter your details below</h6>
+									{% endif %}
+								</div>	
+								<div class="form-wrap">
+									<form method="POST" data-toggle="validator" role="form">
+										{% csrf_token %}
+										<div class="row">
+											<div class="col-md-6">
+												<div class="form-group">
+													<label class="control-label mb-5" for="first_name">First Name</label>
+													<input type="text" id="first_name" name="first_name" class="form-control" required="" placeholder="Frist name" value="{{ first_name }}" pattern="[\p{L}\s]+" data-error="Please fill only characters">
+													<div class="help-block with-errors"></div>
+												</div>
+											</div>
+											<div class="col-md-6">
+												<div class="form-group">
+													<label class="control-label mb-5" for="last_name">Last Name</label>
+													<input type="text" id="last_name" name="last_name" class="form-control" required="" placeholder="Last Name" value="{{ last_name }}" pattern="[\p{L}\s]+" data-error="Please fill only characters">
+													<div class="help-block with-errors"></div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-6">
+												<div class="form-group">
+													<label class="control-label mb-5" for="id_num">ID Number</label>
+													<input type="text" id="id_num" name="id_num" class="form-control" maxlength="11" data-error="Please fill 11 digits" pattern="[0-9]{11}" required="" placeholder="Enter ID Number digits"  value="{{ id_num }}">
+													<div class="help-block with-errors"></div>
+												</div>
+											</div>
+											<div class="col-md-6">
+												<div class="form-group">
+													<label class="control-label mb-5" for="birthday">BirthDay</label>
+													<input type="text" id="birthday" name="birthday" class="form-control" required="" placeholder="Birthday"  value="{{ birthday }}">
+												</div>
+											</div>
+										</div>
+
+										<div class="row">
+											<div class="col-md-6">
+												<div class="form-group">
+													<label class="control-label mb-5" for="phone">Mobile Number</label>
+													<input type="text" id="phone" name="phone" class="form-control" maxlength="9" data-error="Please fill correct number with 9 digits" required="" pattern="[0-9]{9}" placeholder="Mobile Number" value="{{ phone }}">
+													<div class="help-block with-errors"></div>
+												</div>
+											</div>
+											<div class="col-md-6">
+												<div class="form-group">
+													<label class="control-label mb-5" for="email">Email</label>
+													<input type="email"  id="email" name="email" class="form-control" required="" data-error="That email address is invalid" placeholder="email address" value="{{ email }}">
+													<div class="help-block with-errors"></div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-6">
+												<div class="form-group">
+													<label class="control-label mb-5" for="password">Password</label>
+													<input type="password" id="password" name="password" class="form-control" required="" placeholder="Password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" >
+													<div class="help-block">Minimum of 8 characters with at least one number and one uppercase and lowercase</div>
+												
+												</div>
+											</div>
+											<div class="col-md-6">
+												<div class="form-group">
+													<label class="control-label mb-5" for="password1">Confirm Password</label>
+													<input type="password"id="password1" name="password1" class="form-control" required="" data-error=" " data-match="#password" data-match-error="Whoops, these don't match" placeholder="Confirm Password">
+													<div class="help-block with-errors"></div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-12">
+												<div class="g-recaptcha" data-sitekey="{{ recaptcha_key }}" data-callback="verifyCaptcha" data-expired-callback="expiredCallback"></div>
+												<div class="form-group">
+													
+													<input type="text" id="captch_response" name="captch_response" class="form-control" required="" value="" data-error="This field is required." style="opacity: 0;width: 0;height:0;">
+													<div id="div_error" class="help-block with-errors"></div>
+												</div>
+											</div>
+										</div>
+										
+										<div class="form-group mt-10">
+											<div class="checkbox checkbox-primary pr-10 pull-left">
+												<input id="checkbox_2" required="" type="checkbox">
+												<label for="checkbox_2"> I agree to all terms and agreements</span></label>
+											</div>
+											<div class="clearfix"></div>
+										</div>
+										<div class="form-group text-center mb-50 mt-50 ma-30">
+											<button type="submit" class="btn btn-danger btn-rounded btn-block">sign Up</button>
+										</div>
+										<div class="form-group text-center">
+											<span class="txt-grey mr-10">Do you have an account?</span>
+											<a class="txt-danger" href="{% url 'login' %}">Sign In</a>
+										</div>
+									</form>
+								</div>
+							</div>	
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /Row -->	
+		</div>
+		
+	</div>
+{% endblock %}
+{% block javascript%}
+<script type="text/javascript">
+	$(function () {
+		var endDate = new Date();
+		endDate.setFullYear( endDate.getFullYear() - 18 ); 
+		endDate.setDate(endDate.getDate());
+		console.log(endDate);
+		$('#birthday').datetimepicker({
+			maxDate: endDate,
+			format: 'YYYY-MM-DD',
+		});
+
+	});
+	function verifyCaptcha() {
+	    $("#captch_response").val('OKOKOK');
+	    $("#div_error").hide();
+	}
+	function expiredCallback() {
+		console.log('expired');
+	    $("#captch_response").val('');
+	    $("#div_error").show();
+	}
+</script>
+{% endblock %}

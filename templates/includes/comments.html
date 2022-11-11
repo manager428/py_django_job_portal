@@ -1,0 +1,82 @@
+
+{% load static %}
+{% load i18n %}
+<div class="panel panel-default card-view">
+    <div class="panel-wrapper collapse in">
+        <div class="panel-body pt-0">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h4 class="txt-dark flex flex-middle capitalize-font">Public Clarification Board</h4>
+                </div>
+            </div>
+            <hr class="light-grey-hr mb-10 mt-5"/>
+            {% if loan.status != 1 and loan.status != 5 and request.user.is_superuser is False %}
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="bg-grad-light">
+                            <div class="row pa-5">
+                                <div class="col-md-1 col-xs-4 pl-15 pr-5">
+                                    {% if user.picture %}
+                                        <img src="{{ user.picture.url }}" alt="user_auth" style="width:75px; height:75px; margin: auto;" class=" text-center img-responsive img-circle"/>
+                                    {% else %}
+                                        <img src="{% static 'img/profile.jpg' %}" alt="user_auth" style="width:75px; height:75px; margin: auto;" class=" text-center img-responsive img-circle"/>
+                                    {% endif %}
+                                </div>
+                                <form id="commentForm" data-toggle="validator" role="form">
+                                    <div class="col-md-6 col-xs-7 pl-5 pr-5">
+                                        <div class="form-group mb-0">
+                                            <textarea id="txt_comment" name="comment" class="form-control" rows="3" placeholder="Write a comment..." required></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 col-xs-1">
+                                        <button id="btn_submit" type="submit" style="visibility: hidden">submit</button>
+                                    </div>
+                                </form>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr class="light-grey-hr mb-30 mt-15"/>
+            {% endif %}
+            
+            <div class="streamline user-activity">
+                {% for comment in loan.comments %}
+                    <div class="sl-item" data-id="{{ comment.id }}">
+                        <div class="sl-avatar avatar  avatar-circle">
+                            {% if comment.user.picture %}
+                                <img src="{{ comment.user.picture.url }}" class="img-responsive img-circle" alt="avatar" />
+                            {% else %}
+                                <img src="{% static 'img/profile.jpg' %}" class="img-responsive img-circle" alt="avatar" />
+                            {% endif %}
+                        </div>
+                        <div class="sl-content">
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <span class="capitalize-font txt-primary mr-5 weight-500">{{ comment.user.first_name }} {{ comment.user.last_name }}</span>
+                                </div>
+                                <div class="col-xs-6">
+                                    <span class="inline-block">{{ comment.created_at }}</span>
+                                    <!-- {% if comment.user.id == request.user.id %}
+                                        <a href="javascript:void(0)" class="text-inverse btn_delete_comment ml-10" data-id="{{ comment.id }}" title="" data-toggle="tooltip" data-original-title="Delete"><i class="fa fa-trash txt-danger"></i></a>
+                                    {% endif %} -->
+                                </div>
+                            </div>
+                            <p class="block txt-grey font-12">{{ comment.msg }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            {% if loan.comments.has_next %}
+                <div class="text-center">
+                    <a id="btn_load_more" href="javascript:void(0);" class="capitalize-font txt-primary mr-5 weight-500">Load More...</a>
+                    <input type="hidden" id="all_pages" value='{{ loan.comments_all_page }}'/>
+                </div>
+                <div class="text-center">
+                    <div class="loader"></div>
+                </div>
+            {% endif %}      
+
+        </div>
+    </div>
+</div>

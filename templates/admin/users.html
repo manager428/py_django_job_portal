@@ -1,0 +1,190 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+{% block content %}
+    <style>
+        .bootstrap-select .btn.btn-default{
+            background: rgb(255, 255, 255);
+            padding: 10px 12px;
+        }
+        
+        .bootstrap-select .dropdown-toggle:focus{
+            outline: none !important;
+        }
+    </style>
+    <!-- Row -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default card-view">
+                <div class="panel-wrapper collapse in">
+                    <div class="panel-body pt-0">
+                        <h4 class="txt-dark flex flex-middle capitalize-font">Manage Users</h4>
+                        <hr class="light-grey-hr"/>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="table-responsive mt-5 mb-15">
+                                    <table id="dataTable" class="table  display table-hover mb-30" data-page-size="10">
+                                        <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Name</th>
+                                                <th>Email</th>
+                                                <th>Phone</th>
+                                                <th>Birthday</th>
+                                                <th>ID Number</th>
+                                                <th>Role</th>
+                                                <th>Company Name</th>
+                                                <th>Joining date</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for item in users %}
+                                                <tr>
+                                                    <td>{{ forloop.counter }}</td>
+                                                    <td>{{ item.first_name }} {{ item.last_name }}</td>
+                                                    <td>{{ item.email }}</td>
+                                                    <td>{{ item.phone }}</td>
+                                                    <td>{{ item.birthday|date:'Y-m-d' }}</td>
+                                                    <td>{{ item.id_num }}</td>
+                                                    <td>
+                                                        {% if item.is_superuser %}
+                                                            <span class="label label-info">Admin</span>
+                                                        {% else %}
+                                                            {% if item.role == 0 %}
+                                                                <span class="label label-success">Regular</span>
+                                                            {% else %}
+                                                                <span class="label label-warning">Company</span>
+                                                            {% endif %}
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>{{ item.company|default_if_none:'' }}</td>
+                                                    <td>{{ item.date_joined|date:'Y-m-d' }}</td>
+                                                    <td>
+                                                        <a href="javascript:void(0)" class="text-inverse pr-10 btn_change_role" data-id="{{ item.id }}"  data-role="{{ item.role }}" data-company="{% if item.company %}{{ item.company.id }}{% else %}{% endif %}" title="Change Role" data-toggle="tooltip"><i class="zmdi zmdi-edit txt-warning"></i></a>
+                                                        <!-- <a href="javascript:void(0)" class="text-inverse pr-10" title="change Password" data-toggle="tooltip"><i class="zmdi zmdi-refresh-sync txt-warning"></i></a> -->
+                                                        <a href="javascript:void(0)" class="text-inverse btn_delete" data-id="{{ item.id }}" title="Delete" data-toggle="tooltip"><i class="zmdi zmdi-delete txt-danger"></i></a>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Row -->
+    <div id="changeModal" class="modal fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h5 class="modal-title" id="myModalLabel">Change Role</h5>
+                </div>
+                <div class="modal-body">
+                    <!-- Row -->
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="">
+                                <div class="panel-wrapper collapse in">
+                                    <div class="panel-body pa-0">
+                                        <div class="col-sm-12 col-xs-12">
+                                            <div class="text-center">
+                                                <p class="txt-danger p-2" style="font-size: 14.9px;"></p>
+                                            </div>
+                                            <div class="form-wrap">
+                                                <div class="form-group">
+                                                    <label class="pull-left control-label mb-5" for="role_type">User Role</label>
+                                                    <select id="role_type" class="form-control">
+                                                        <option value="0">Regular</option>
+                                                        <option value="1">Company</option>
+                                                        <!-- <option value="2">Admin</option> -->
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="pull-left control-label mb-5" for="company_name">Company Name</label>
+                                                    <select id="company_name" name="company_name" class="form-control" data-live-search="true" data-size="5">
+                                                        {% for item in companies %}
+                                                            <option value="{{ item.id }}">{{ item.name }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" id="user_id" />
+                <div class="modal-footer">
+                    <button id="btn_change" type="button" class="btn btn-orange waves-effect">Save</button>
+                    <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+{% endblock %}
+{% block javascript %}
+<script type="text/javascript">
+    $('#dataTable').DataTable();
+    $('select').selectpicker();
+
+    $('.btn_change_role').on('click', function(){
+        $("#role_type").val($(this).data('role'));
+        $("#user_id").val($(this).data('id'));
+        $("#company_name").val($(this).data('company'));
+        $('select').selectpicker('refresh');
+        $("#changeModal").modal();
+    });
+    $("#btn_change").on('click', function(){
+        $.ajax({
+            headers: { "X-CSRFToken": '{{csrf_token}}' },
+            url: '{% url "ajax-change-role" %}',
+            data: {
+                'role': $("#role_type").val(),
+                'company': $("#company_name").val(),
+                'user_id': $("#user_id").val()
+            },
+            type: 'POST',
+            success: function (data) {
+                location.reload();
+            }
+        });
+    });
+    $('.btn_delete').on('click', function(){
+        var user_id = $(this).data('id');
+        swal({   
+            title: "Are you sure?",   
+            text: "You will not be able to recover this user!",   
+            showCancelButton: true,   
+            confirmButtonColor: "#ed1b60",   
+            confirmButtonText: "Yes, Delete it!",   
+            cancelButtonText: "No, Cancel it!",   
+            closeOnConfirm: true,   
+            closeOnCancel: true 
+        }, function(isConfirm){   
+            if (isConfirm) {     
+                $.ajax({
+                    headers: { "X-CSRFToken": '{{csrf_token}}' },
+                    url: '{% url "ajax-delete-user" %}',
+                    data: {
+                        'user_id': user_id
+                    },
+                    type: 'POST',
+                    success: function (data) {
+                        location.reload();
+                    }
+                });  
+            }
+        });
+    });
+</script>
+{% endblock %}

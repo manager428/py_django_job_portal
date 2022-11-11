@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block content %}
+    <style>
+        .btn-default{
+            background: #fff !important;
+        }
+        .btn-default:hover{
+            background: #fff !important;
+        }
+        .col-centered{
+            float: none;
+            margin: 0 auto;
+        }
+    </style>
+    <div class="row">
+        <div class="col-sm-3 col-centered mt-50">
+            <div class="form-group">
+                <label class="control-label mb-5">Country</label>
+                <select id="country" name="country" class="form-control" data-live-search="true">
+                    <option selected disabled hidden style='display: none' value=""></option>
+                    {% for country in countries %}
+                        <option value="{{ country.code }}">{{ country.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+    
+{% endblock %}
+{% block javascript %}
+    <script type="text/javascript">
+        $('select').selectpicker();
+        $("#country").on('change', function(){
+            if ($(this).val() == "US"){
+                location.href = "{% url 'post-job' %}";
+            }else{
+                location.href = "{% url '404' %}";
+            }
+        });
+    </script>
+{% endblock %}

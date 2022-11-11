@@ -1,0 +1,297 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+{% block content %}
+<div class="row">
+    <div class="col-sm-4">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default card-view  pa-0">
+                    <div class="panel-wrapper collapse in">
+                        <div class="panel-body  pa-0">
+                            <div class="profile-box">
+                                <div class="profile-cover-pic">
+                                    <div class="profile-image-overlay"></div>
+                                </div>
+                                <div class="profile-info text-center mb-15">
+                                    <div class="profile-img-wrap">
+                                        {% if user1.picture %}
+                                            <img id="img_profile" class="inline-block mb-10" src="{{ user1.picture.url }}" alt="user"/>
+                                        {% else %}
+                                        <img id="img_profile" class="inline-block mb-10" src="{% static 'img/profile.jpg' %}" alt="user"/>
+                                        {% endif %}
+                                    </div>	
+                                    <h5 class="block mt-10 weight-500 capitalize-font txt-dark">{{ user1.first_name }} {{ user1.last_name }}</h5>
+                                </div>	
+                                <div class="social-info">
+                                    <b id="btn_upload" class="btn btn-danger btn-block mt-15">Upload Photo</b>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>	
+    </div>	
+    <div class="col-sm-8">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default border-panel card-view">
+                    <div class="panel-heading">
+                        <div class="pull-left">
+                            <h6 class="panel-title txt-dark">My Profile</h6>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="panel-wrapper collapse in">
+                        <div  class="panel-body pb-0 pt-40">
+                            <div class="col-sm-12 col-xs-12">
+                                <div class="form-wrap">
+                                    <form method="POST" data-toggle="validator" role="form" enctype='multipart/form-data'>
+                                        {% if form.errors %}
+                                            <div class="form-group text-center">
+                                                {% for field in form %}
+                                                    
+                                                    {% for error in field.errors %}
+                                                        {% if form.errors.username %}
+                                                            <p class="txt-danger p-2" style="font-size: 14.9px;">A user with that Mobile number already exists.</p>
+                                                        {% else %}
+                                                            <p class="txt-danger p-2" style="font-size: 14.9px;">{{ error|escape }}</p>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                        {% csrf_token %}
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label mb-5" for="first_name">First Name</label>
+                                                    <input type="text" id="first_name" name="first_name" class="form-control" required="" placeholder="Frist name" value="{{ user1.first_name }}" pattern="[\p{L}\s]+">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label mb-5" for="last_name">Last Name</label>
+                                                    <input type="text" id="last_name" name="last_name" class="form-control" required="" placeholder="Last Name" value="{{ user1.last_name }}" pattern="[\p{L}\s]+">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label mb-5" for="id_num">ID Number</label>
+                                                    <input type="text" id="id_num" name="id_num" class="form-control" maxlength="11" data-error="Please fill 11 digits" pattern="[0-9]{11}" required="" placeholder="Enter ID Number digits"  value="{{ user1.id_num }}">
+                                                    <div class="help-block with-errors"></div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label mb-5" for="birthday">BirthDay</label>
+                                                    <input type="text" id="birthday" name="birthday" class="form-control" required="" placeholder="Birthday"  value="{{ user1.birthday|date:'Y-m-d' }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label mb-5" for="phone">Mobile Number</label>
+                                                    <input type="text" id="phone" name="phone" class="form-control" maxlength="9" data-error="Please fill correct number" required="" pattern="[0-9]{9}" placeholder="Mobile Number" value="{{ user1.phone }}">
+                                                    <div class="help-block with-errors"></div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label mb-5" for="email">Email</label>
+                                                    <input type="email"  id="email" name="email" class="form-control" required="" data-error="That email address is invalid" placeholder="email address" value="{{ user1.email }}">
+                                                    <div class="help-block with-errors"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <input type="file" id="file_upload" onchange="readURL(this);" name="picture" style="display: none;" accept="image/x-png,image/gif,image/jpeg" >
+                                        <input type="hidden" id="username" name="username" class="form-control" value="{{ user1.phone }}">
+                                                    
+                                        <div class="row">
+                                            <div class="col-md-6 mb-30 mt-40 text-center">
+                                                <button type="submit" class="btn btn-orange waves-effect btn-rounded">Update Profile</button>
+                                            </div>
+                                            <div class="col-md-6 mb-30 mt-40 text-center">
+                                                <b class="btn btn-danger btn-rounded"  data-toggle="modal" data-target="#resetModal">Reset Password</b>
+                                            </div>
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>	
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    <div id="resetModal" class="modal fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h5 class="modal-title" id="myModalLabel">Reset Password</h5>
+                </div>
+                <div class="modal-body">
+                    <!-- Row -->
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="">
+                                <div class="panel-wrapper collapse in">
+                                    <div class="panel-body pa-0">
+                                        <div class="col-sm-12 col-xs-12">
+                                            <div class="text-center">
+                                                <p id="text_error_reset" class="txt-danger p-2" style="font-size: 14.9px;"></p>
+                                            </div>
+                                            <div class="form-wrap">
+                                                
+                                                <form id="reset_form" data-toggle="validator" role="form">
+                                                    {% csrf_token %}
+                                                    
+                                                    <div class="form-group">
+                                                        <label class="pull-left control-label mb-10" for="old_password">Old Password</label>
+                                                        <input type="password" class="form-control" placeholder="Enter Old pwd" id="old_password" required />
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="pull-left control-label mb-10" for="password">New Password</label>
+                                                        <input type="password" id="password" name="password" class="form-control" required placeholder="Password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" >
+                                                        <div class="help-block">Minimum of 8 characters with at least one number and one uppercase and lowercase</div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="pull-left control-label mb-10" for="password1">Confirm Password</label>
+                                                        <input type="password" class="form-control" data-error="" data-match="#password" data-match-error="Whoops, these don't match" placeholder="Re-Enter pwd" id="password1" required />
+                                                        <div class="help-block with-errors"></div>
+                                                    </div>
+                                                    <button id="real_reset" type="submit" class="btn btn-danger btn-rounded btn-block" style="visibility: hidden">Reset</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="btn_reset" type="button" class="btn btn-orange waves-effect">Save</button>
+                    <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+</div>
+
+{% endblock %}
+{% block javascript %}
+<script type="text/javascript">
+    $("#phone").on('change', function(){
+        $("#username").val($(this).val());
+    });
+    $("#btn_upload").on('click', function(){
+        $("#file_upload").click();
+    });
+    function getExtension(filename) {
+        var parts = filename.split('.');
+        return parts[parts.length - 1];
+    }
+
+    function isImage(filename) {
+        var ext = getExtension(filename);
+        switch (ext.toLowerCase()) {
+            case 'jpg':
+            case 'jpeg':
+            case 'bmp':
+            case 'png':
+                //etc
+                return true;
+        }
+        return false;
+    }
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var maxSize = 1024 * 512 * 10; // 5MB
+            var fileSize = input.files[0].size;
+            console.log(maxSize);
+            console.log(fileSize);
+            if (fileSize < maxSize){
+                if (isImage($("#file_upload").val())){
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#img_profile')
+                            .attr('src', e.target.result);
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                }else{
+                    swal({ 
+                        title: '',  
+                        text: "Please upload images files, jpg, bmp, jpeg, png",   
+                        confirmButtonColor: "#ed1b60",   
+                    });
+                    $("#file_upload").val(''); 
+                }
+                
+            }else{
+                swal({ 
+                    title: '',  
+                    text: "Please upload image less than 5 MB ",   
+                    confirmButtonColor: "#ed1b60",   
+                });
+                $("#file_upload").val(''); 
+            }
+            
+        }
+    }
+    var endDate = new Date();
+    endDate.setFullYear( endDate.getFullYear() - 18 ); 
+    endDate.setDate(endDate.getDate());
+
+    $('#birthday').datetimepicker({
+        maxDate: endDate,
+        format: 'YYYY-MM-DD',
+    });
+    $('#birthday').val('{{user1.birthday|date:"Y-m-d"}}');
+    
+    $("#btn_reset").on('click', function(){
+        $("#real_reset").click();
+    });
+    $("#div_form_error_reset").hide();
+    $("#reset_form").validator().on('submit', function(e) {
+        if (e.isDefaultPrevented()) {
+            // handle the invalid form...
+        } else {
+            e.preventDefault();
+            e.stopPropagation();
+            $.ajax({
+                headers: { "X-CSRFToken": '{{csrf_token}}' },
+                url: '{% url "ajax-reset-user" %}',
+                data: {
+                    'password': $("#password").val(),
+                    'old_password': $("#old_password").val()
+                },
+                type: 'POST',
+                success: function (data) {
+                    if (data.err_code == 1){
+                        $("#text_error_reset").html("{% blocktrans %}Old Password is not matched{% endblocktrans %}");
+                        $("#div_form_error_reset").show();
+                    }else{
+                        $("#resetModal").modal('hide');
+                        $("#old_password").val("");
+                        $("#password").val("");
+                        $("#password1").val("");
+                    }
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,298 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+{% load humanize %}
+{% block content %}
+    <style>
+        .bootstrap-select .btn.btn-default{
+            background: rgb(255, 255, 255);
+            padding: 10px 12px;
+        }
+        
+        .bootstrap-select .dropdown-toggle:focus{
+            outline: none !important;
+        }
+    </style>
+    <!-- Row -->
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default card-view">
+                <div class="panel-wrapper collapse in">
+                    <div class="panel-body pt-0">
+                        <div class="form-wrap">
+                            <form method="POST" data-toggle="validator" role="form" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                {% if form.errors %}
+                                    <div class="form-group text-center">
+                                        {% for field in form %}
+                                            
+                                            {% for error in field.errors %}
+                                                {% if form.errors.username %}
+                                                    <p class="txt-danger p-2" style="font-size: 14.9px;">A user with that Mobile number already exists.</p>
+                                                {% else %}
+                                                    <p class="txt-danger p-2" style="font-size: 14.9px;">{{ error|escape }}</p>
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <h4 class="txt-dark flex flex-middle capitalize-font">{% if loan %}Edit Loan{% else %}Create Loan{% endif %}</h4>
+                                <hr class="light-grey-hr"/>
+                                
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="control-label mb-5">Purpose</label>
+                                            <select id="purpose" name="purpose" class="form-control">
+                                                {% for item in purposes %}
+					                    		    <option value="{{ item.id }}">{{ item.name }}</option>
+					                    	    {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="control-label mb-5">Loan Amount</label>
+                                            <input type="number" id="loan_amount" name="loan_amount" class="form-control" placeholder="" min="300" max="1000000" required value="{% if loan %}{{ loan.loan_amount }}{% endif %}">
+                                            <div class="help-block with-errors"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="control-label mb-5">Loan Term</label>
+                                            <input type="number" id="loan_term" name="loan_term" class="form-control" placeholder="" min="6" max="216" required value="{% if loan %}{{ loan.loan_term }}{% endif %}">
+                                            <div class="help-block with-errors"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="control-label mb-5">Currency</label>
+                                            <select id="currency" name="currency" class="form-control">
+                                                {% for item in currencies %}
+					                    		    <option value="{{ item.id }}">{{ item.name }}</option>
+					                    	    {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="control-label mb-5">Co-borrower</label>
+                                            <select id="co_borrower_sel" class="form-control" multiple data-max-options="2">
+                                                <option value="Mother">Mother</option>
+                                                <option value="Father">Father</option>
+                                                <option value="Sister">Sister</option>
+                                                <option value="Brother">Brother</option>
+                                                <option value="Wife">Wife</option>
+                                                <option value="Husband">Husband</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="control-label mb-5">Income Type</label>
+                                            <select id="income_type" name="income_type" class="form-control" required>
+                                                {% for item in income_types %}
+					                    		    <option value="{{ item.id }}">{{ item.name }}</option>
+					                    	    {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="control-label mb-5">Proof of income</label>
+                                            <select id="income_proof" name="income_proof" class="form-control" required>
+                                                {% for item in proofs %}
+					                    		    <option value="{{ item.id }}">{{ item.name }}</option>
+					                    	    {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="control-label mb-5">Income Amount</label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon"><span class="sp_currency">GEL</span></div>
+                                                <input type="number" id="income_amount" name="income_amount" step="0.01" min="0" class="form-control" value="{{ loan.income_amount }}" required>
+                                            </div>
+                                            <div class="help-block with-errors"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="control-label mb-5">Current Payables in Loan</label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon"><span class="sp_currency">GEL</span></div>
+                                                <input type="number" id="payable_amount" name="payable_amount" step="0.01" min="0" class="form-control" value="{{ loan.payable_amount }}" required>
+                                            </div>
+                                            <div class="help-block with-errors"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="control-label mb-5">Marital Status</label>
+                                            <select id="marital_status" name="marital_status" class="form-control">
+                                                <option value="Single">Single</option>
+                                                <option value="Married">Married</option>
+                                                <option value="Widowed">Widowed</option>
+                                                <option value="Divorced">Divorced</option>
+                                                <option value="Separated">Separated</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label class="control-label mb-5">Dependents</label>
+                                                    <input type="number" id="dependents" name="dependents" min="0" max="20" class="form-control" value="{{ loan.dependents }}" required>
+                                                    <div class="help-block with-errors"></div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label class="control-label mb-5">Loan security</label>
+                                                    <select id="loan_security" name="loan_security" class="form-control">
+                                                        <option value="">--------------------</option>
+                                                        {% for item in loan_securities %}
+                                                            <option value="{{ item.id }}">{{ item.name }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label class="control-label mb-5">Cadastral code</label>
+                                                    <input type="text" id="cadastral_code" name="cadastral_code" data-mask="99.99.99.999" class="form-control" value="{{ loan.cadastral_code }}" disabled>
+                                                    <div class="help-block">f.e, 20.41.04.025</div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="control-label mb-5">City</label>
+                                            <select id="city" name="city" class="form-control" data-live-search="true" data-size="5" required>
+                                                {% for city in cities %}
+					                    		    <option value="{{ city.id }}">{{ city.name }}</option>
+					                    	    {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div class="form-group">
+                                            <label class="control-label mb-5">Address</label>
+                                            <input type="text" id="address" name="address" class="form-control" required value="{{ loan.address }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="control-label mb-5">Work Industry</label>
+                                            <select id="industry" name="industry" class="form-control" data-live-search="true" data-size="5" required>
+                                                {% for industry in industries %}
+					                    		    <option value="{{ industry.id }}">{{ industry.name }}</option>
+					                    	    {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <input type="hidden" id="co_borrower" name="co_borrower" value="{{ loan.co_borrower }}">
+                                <input type="hidden" name="user" value="{{ user.id }}">
+                                
+                                
+                                <div class="form-actions mt-30">
+                                    <button class="btn btn-orange btn-icon left-icon mr-10 pull-left"><i class="fa fa-check"></i><span>{% if loan %}Save Loan{% else %}Request Loan{% endif %}</span></button>
+                                    <a href="{% url 'index' %}"  class="btn btn-default pull-left">Cancel</a>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Row -->
+    
+{% endblock %}
+{% block javascript %}
+<script type="text/javascript">
+    $('select').selectpicker();
+    
+    // edit mode
+    '{% if loan %}'
+        $("#purpose").val('{{ loan.purpose.id }}');
+        $("#currency").val('{{ loan.currency.id }}');
+        $("#income_type").val('{{ loan.income_type.id }}');
+        $("#income_proof").val('{{ loan.income_proof.id }}');
+        $("#marital_status").val('{{ loan.marital_status }}');
+        $("#loan_security").val('{{ loan.loan_security.id }}');
+        disableInput();
+        $("#industry").val('{{ loan.industry.id }}');
+        $("#city").val('{{ loan.city.id }}');
+        var borrower = '{{ loan.co_borrower }}';
+        $("#co_borrower_sel").val(borrower.split(', '));
+        $('select').selectpicker('refresh');
+    '{% endif %}'
+
+
+    $('#loan_security').on('change', function(){
+        disableInput();
+    });
+    function disableInput(){
+        if($("#loan_security").val() != ""){
+            $('#cadastral_code').prop('disabled', false);
+            $('#cadastral_code').prop('required', true);
+            //$('#co_borrower_sel').attr('disabled', false);
+            //$('#co_borrower_sel').selectpicker('refresh');
+        }else{
+            $('#cadastral_code').prop('disabled', true);
+            $('#cadastral_code').prop('required', false);
+            $('#cadastral_code').val('');
+            //$('#co_borrower_sel').attr('disabled', true);
+            //$('#co_borrower_sel').val('');
+            //$('#co_borrower_sel').selectpicker('refresh');
+        }
+    }
+    
+    function initAutocomplete() {
+        autocomplete = new google.maps.places.Autocomplete(document.getElementById('address'), {types: ['geocode']});
+        autocomplete.setComponentRestrictions({
+            country: ["ge"]
+        });
+
+        // Avoid paying for data that you don't need by restricting the set of
+        // place fields that are returned to just the address components.
+        autocomplete.setFields(['address_component']);
+    }
+    // $("#address").on('input',function(){
+    //     var str = $("#address").val();
+    //     var prefix = $('#city option:selected').html() + ', ';
+    //     if(str.indexOf(prefix) == 0) {
+    //         console.log($("#address").val());
+    //     } else {
+    //         if (prefix.indexOf(str) >= 0) {
+    //             $("#address").val(prefix);
+    //         } else {
+    //             $("#address").val(prefix+str);
+    //         }
+    //     }
+
+    // });
+   
+    $('#co_borrower_sel').on('change', function(){
+        $("#co_borrower").val($(this).val().join(", "));
+    });
+    $('#currency').on('change', function(){
+        $('.sp_currency').html($(this).find(":selected").text());
+    });
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBspItej6-X3hpgmtHGbsiWND7YCZXHE2o&libraries=places&callback=initAutocomplete"
+    async defer></script>
+{% endblock %}

@@ -1,0 +1,6 @@
+
+django==2.2.6
+django-countries
+stripe
+psycopg2
+psycopg2-binary
